@@ -86,7 +86,7 @@
         <p>22 consoantes, 5 formas finais sofit, dagesh forte e leve, sinais massoréticos — tudo num só lugar.</p>
         <div class="hero-cards">
           <div class="hero-card" onclick="showSection('alef-bet')">
-            <span class="num">22</span>
+            <span class="num">31</span>
             <small>Consoantes</small>
           </div>
           <div class="hero-card" onclick="showSection('alef-bet')">
@@ -372,7 +372,7 @@
 
       {
         id: 17, heb: 'פ', name: 'Pe', alt: 'פּ', translit: 'p / f', num: 80, sofit: 'ף', hasDagesh: true, audio: 'pe',
-        altAudio: 'feh', sofitAudio: 'final-pe',
+        altAudio: 'fe', sofitAudio: 'final-pe',
         desc: 'Com Dagesh (פּ): "p". Sem Dagesh (פ): "f". Uma das BeGaDKePhaT. Tem forma final Sofit (ף).',
         dageshInfo: '<strong>Com Dagesh (פּ) — Pe:</strong> "p" oclusivo<br><strong>Sem Dagesh (פ) — Feh:</strong> "f" fricativo labiodental<br><strong>Sofit (ף):</strong> usada ao final de palavras'
       },
@@ -500,66 +500,115 @@
     // =====================
     let alphabetMode = 'complete'; // 'complete' | 'withvowels'
 
+    // 31 cards: cada linha = uma entrada independente na grade
+    // Para letras com variante (dagesh/sin), cada variante tem card próprio
+    // Para letras com sofit, a forma sofit tem card próprio
+    function buildAllCards() {
+      const cards = [];
+
+      letters.forEach(l => {
+        // Carta principal: se tem dagesh (BeGaDKePhaT), mostra a forma COM dagesh (alt)
+        // exceto Shin/Sin que tem lógica própria
+        if (l.id === 21) {
+          // Shin
+          cards.push({
+            heb: 'שׁ', name: 'Shin', translit: 'š', num: 300,
+            audio: 'shin', badge: 'Shin/Sin', badgeColor: '#64a0ff',
+            sofit: false, isSofit: false,
+            letter: l,
+            desc: l.desc
+          });
+          // Sin
+          cards.push({
+            heb: 'שׂ', name: 'Sin', translit: 'ś', num: 300,
+            audio: 'sin', badge: 'Shin/Sin', badgeColor: '#64a0ff',
+            sofit: false, isSofit: false,
+            letter: l,
+            desc: l.desc
+          });
+        } else if (l.hasDagesh && l.alt) {
+          // Forma com dagesh (alt)
+          cards.push({
+            heb: l.alt, name: l.name, translit: l.translit.split(' / ')[0], num: l.num,
+            audio: l.audio, badge: 'BeGaDKePhaT', badgeColor: 'var(--accent)',
+            sofit: false, isSofit: false,
+            letter: l,
+            desc: l.desc
+          });
+          // Forma sem dagesh: nome especial para Bet/Vet, Kaf/Chaf, Pe/Fe
+          const altNames = { 2: 'Vet', 3: 'Gimel', 4: 'Dalet', 11: 'Chaf', 17: 'Fe', 22: 'Tav' };
+          const altTranslits = { 2: 'v', 3: 'g', 4: 'd', 11: 'kh', 17: 'f', 22: 'th' };
+          const altAudios = { 2: 'vet', 11: 'chaf', 17: 'fe' };
+          cards.push({
+            heb: l.heb, name: altNames[l.id] || l.name, translit: altTranslits[l.id] || l.translit, num: l.num,
+            audio: altAudios[l.id] || l.audio, badge: 'BeGaDKePhaT', badgeColor: 'var(--accent)',
+            sofit: false, isSofit: false,
+            letter: l,
+            desc: l.desc
+          });
+        } else {
+          // Letra simples
+          cards.push({
+            heb: l.heb, name: l.name, translit: l.translit, num: l.num,
+            audio: l.audio, badge: null,
+            sofit: false, isSofit: false,
+            letter: l,
+            desc: l.desc
+          });
+        }
+
+        // Forma sofit: card separado
+        if (l.sofit) {
+          const sofitNames = { 11: 'Chaf Sofit', 13: 'Mem Sofit', 14: 'Nun Sofit', 17: 'Pe Sofit', 18: 'Tsade Sofit' };
+          const sofitAudioMap = { 11: 'chaf', 13: 'mem', 14: 'nun', 17: 'fe', 18: 'tsade' };
+          cards.push({
+            heb: l.sofit, name: sofitNames[l.id] || (l.name + ' Sofit'), translit: '—',
+            num: l.num, audio: sofitAudioMap[l.id] || l.audio,
+            badge: 'Sofit', badgeColor: '#7aaef5',
+            isSofit: true, letter: l,
+            desc: `Forma final (sofit) do ${l.name}, usada quando a letra aparece no final de uma palavra.`
+          });
+        }
+      });
+
+      return cards;
+    }
+
     function renderAlphabet(filter = 'all') {
       const grid = document.getElementById('alphabet-grid');
       grid.innerHTML = '';
-      letters.forEach(l => {
-        if (filter !== 'all') {
-          if (filter === 'sofit' && !l.sofit) return;
-          if (filter === 'dagesh' && !l.hasDagesh) return;
-          if (filter === 'diacritic' && l.id !== 21) return; // só Shin/Sin
-        }
+      const allCards = buildAllCards();
+
+      allCards.forEach(c => {
+        // Filtros
+        if (filter === 'sofit' && !c.isSofit) return;
+        if (filter === 'dagesh' && c.badge !== 'BeGaDKePhaT') return;
+        if (filter === 'diacritic' && c.badge !== 'Shin/Sin') return;
+
         const div = document.createElement('div');
-        div.className = 'letter-card' + (l.hasDagesh ? ' dagesh' : '') + (l.id === 21 ? ' diacritic' : '');
+        div.className = 'letter-card' + (c.badge === 'BeGaDKePhaT' ? ' dagesh' : '') + (c.badge === 'Shin/Sin' ? ' diacritic' : '') + (c.isSofit ? ' sofit' : '');
 
-        // Badges
-        let badges = '';
-        if (l.sofit) badges += `<span class="letter-badge" style="background:rgba(122,174,245,0.1);color:#7aaef5;border:1px solid rgba(122,174,245,0.2)">Sofit</span> `;
-        if (l.hasDagesh) badges += `<span class="letter-badge" style="background:rgba(42,109,217,0.1);color:var(--accent);border:1px solid rgba(42,109,217,0.2)">BeGaDKePhaT</span>`;
-        if (l.id === 21) badges += `<span class="letter-badge" style="background:rgba(100,160,255,0.1);color:#64a0ff;border:1px solid rgba(100,160,255,0.2)">Shin/Sin</span>`;
-
-        // Forma alternativa (dagesh / sem dagesh / sofit) exibida junto
-        let altBlock = '';
-        if (l.alt) {
-          altBlock = `<div class="letter-alt-row">
-        <span class="letter-alt-item">
-          <span class="letter-alt-char">${l.heb}</span>
-          <span class="letter-alt-label">sem dagesh</span>
-        </span>
-        <span class="letter-alt-sep">·</span>
-        <span class="letter-alt-item">
-          <span class="letter-alt-char">${l.alt}</span>
-          <span class="letter-alt-label">com dagesh</span>
-        </span>
-      </div>`;
-        } else if (alphabetMode === 'withvowels') {
-          // modo com vogais: mostra a letra com patah embaixo como exemplo
-          altBlock = `<div style="font-size:1.6rem;direction:rtl;color:rgba(240,243,248,0.5);margin-top:0.2rem">${l.heb}ַ</div>`;
-        }
-
-        // Sofit inline
-        let sofitBlock = '';
-        if (l.sofit) {
-          sofitBlock = `<div class="letter-sofit-row">
-        <span class="letter-alt-char" style="color:#7aaef5">${l.sofit}</span>
-        <span class="letter-alt-label">forma final</span>
-      </div>`;
+        let badgeHtml = '';
+        if (c.badge) {
+          let bg, color, border;
+          if (c.badge === 'Sofit') { bg = 'rgba(122,174,245,0.1)'; color = '#7aaef5'; border = 'rgba(122,174,245,0.2)'; }
+          else if (c.badge === 'BeGaDKePhaT') { bg = 'rgba(42,109,217,0.1)'; color = 'var(--accent)'; border = 'rgba(42,109,217,0.2)'; }
+          else { bg = 'rgba(100,160,255,0.1)'; color = '#64a0ff'; border = 'rgba(100,160,255,0.2)'; }
+          badgeHtml = `<div style="margin-top:0.3rem"><span class="letter-badge" style="background:${bg};color:${color};border:1px solid ${border}">${c.badge}</span></div>`;
         }
 
         div.innerHTML = `
-      <span class="letter-num">${l.num}</span>
-      <span class="letter-heb" style="${l.alt ? 'font-size:2rem' : ''}">${l.alt ? l.alt : l.heb}</span>
-      <span class="letter-name">${l.name}${l.alt && l.id === 21 ? ' / Sin' : ''}</span>
-      <span class="letter-translit">${l.translit}</span>
-      ${altBlock}
-      ${sofitBlock}
-      ${badges ? `<div style="margin-top:0.3rem">${badges}</div>` : ''}
-      <button class="sound-btn" onclick="event.stopPropagation(); playAudio('${l.audio}')">
-        <svg class="icon-speak" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        Ouvir
-      </button>
-    `;
-        div.onclick = () => openModal(l);
+          <span class="letter-num">${c.num}</span>
+          <span class="letter-heb">${c.heb}</span>
+          <span class="letter-name">${c.name}</span>
+          <span class="letter-translit">${c.translit}</span>
+          ${badgeHtml}
+          <button class="sound-btn" onclick="event.stopPropagation(); playAudio('${c.audio}')">
+            <svg class="icon-speak" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            Ouvir
+          </button>
+        `;
+        div.onclick = () => openModal(c.letter);
         grid.appendChild(div);
       });
     }
