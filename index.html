@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>עברית · Hebraico Bíblico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0d0f14;
+      --paper: #f0f3f8;
+      --accent: #2a6dd9;
+      --accent2: #1a4fa8;
+      --gold: #7aaef5;
+      --muted: #707a8a;
+      --border: rgba(240, 243, 248, 0.1);
+      --card-bg: rgba(240, 243, 248, 0.04);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--ink);
+      color: var(--paper);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(240, 243, 248, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240, 243, 248, 0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .glow {
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(42, 109, 217, 0.1) 0%, transparent 65%);
+      pointer-events: none;
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.6;
+      }
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13, 15, 20, 0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 1.35rem;
+      color: rgba(240, 243, 248, 0.85);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-tabs button {
+      background: none;
+      border: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(240, 243, 248, 0.4);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+
+    .nav-tabs button:hover {
+      color: rgba(240, 243, 248, 0.8);
+      background: rgba(240, 243, 248, 0.04);
+    }
+
+    .nav-tabs button.active {
+      color: var(--accent);
+      background: rgba(42, 109, 217, 0.1);
+    }
+
+    /* MAIN */
+    main {
+      padding-top: 5rem;
+      min-height: 100vh;
+    }
+
+    .section {
+      display: none;
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+    }
+
+    .mono-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mono-tag::before,
+    .mono-tag::after {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero .hebrew-big {
+      font-size: clamp(3rem, 10vw, 7rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(42, 109, 217, 0.4);
+      display: block;
+      margin-bottom: 0.5rem;
+      direction: rtl;
+      letter-spacing: 0.1em;
+    }
+
+    .hero p {
+      color: rgba(240, 243, 248, 0.45);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 42ch;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-cards {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 140px;
+    }
+
+    .hero-card:hover {
+      border-color: rgba(42, 109, 217, 0.4);
+      background: rgba(42, 109, 217, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .hero-card .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-card small {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(240, 243, 248, 0.4);
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .section-sub {
+      font-size: 0.875rem;
+      color: rgba(240, 243, 248, 0.4);
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ALPHABET GRID */
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .letter-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    .letter-card:hover {
+      border-color: rgba(42, 109, 217, 0.4);
+      background: rgba(42, 109, 217, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .letter-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .letter-card.sofit {
+      border-color: rgba(122, 174, 245, 0.2);
+    }
+
+    .letter-card.sofit .letter-badge {
+      background: rgba(122, 174, 245, 0.1);
+      color: #7aaef5;
+    }
+
+    .letter-card.dagesh {
+      border-color: rgba(42, 109, 217, 0.25);
+    }
+
+    .letter-card.dagesh .letter-badge {
+      background: rgba(42, 109, 217, 0.12);
+      color: var(--accent);
+    }
+
+    .letter-card.diacritic {
+      border-color: rgba(100, 160, 255, 0.2);
+    }
+
+    .letter-card.diacritic .letter-badge {
+      background: rgba(100, 160, 255, 0.1);
+      color: #64a0ff;
+    }
+
+    .letter-heb {
+      font-size: 2.5rem;
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.4rem;
+      direction: rtl;
+    }
+
+    .letter-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .letter-translit {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(240, 243, 248, 0.4);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .letter-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .letter-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: rgba(240, 243, 248, 0.2);
+      position: absolute;
+      top: 0.4rem;
+      right: 0.5rem;
+    }
+
+    .sound-btn {
+      background: rgba(42, 109, 217, 0.15);
+      border: 1px solid rgba(42, 109, 217, 0.3);
+      border-radius: 2px;
+      color: var(--accent);
+      font-size: 0.65rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.4rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .sound-btn:hover {
+      background: rgba(42, 109, 217, 0.3);
+    }
+
+    /* FILTER TAGS */
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: rgba(240, 243, 248, 0.4);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.85rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      color: rgba(240, 243, 248, 0.8);
+      border-color: rgba(240, 243, 248, 0.2);
+    }
+
+    .filter-btn.active {
+      background: rgba(42, 109, 217, 0.12);
+      border-color: rgba(42, 109, 217, 0.4);
+      color: var(--accent);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 15, 20, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #12151c;
+      border: 1px solid rgba(42, 109, 217, 0.3);
+      border-radius: 6px;
+      padding: 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: rgba(240, 243, 248, 0.4);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--paper);
+    }
+
+    .modal-letter-big {
+      font-size: 5rem;
+      text-align: center;
+      display: block;
+      direction: rtl;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .modal-sofit {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-sofit .sofit-char {
+      font-size: 3rem;
+      direction: rtl;
+      color: rgba(122, 174, 245, 0.7);
+      margin-left: 0.5rem;
+    }
+
+    .modal-sofit small {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(122, 174, 245, 0.5);
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    .modal-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    .meta-tag.blue {
+      background: rgba(42, 109, 217, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(42, 109, 217, 0.3);
+    }
+
+    .meta-tag.light {
+      background: rgba(122, 174, 245, 0.1);
+      color: #7aaef5;
+      border: 1px solid rgba(122, 174, 245, 0.2);
+    }
+
+    .meta-tag.muted {
+      background: rgba(240, 243, 248, 0.05);
+      color: rgba(240, 243, 248, 0.4);
+      border: 1px solid var(--border);
+    }
+
+    .modal-desc {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: rgba(240, 243, 248, 0.6);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-dagesh-info {
+      background: rgba(42, 109, 217, 0.06);
+      border: 1px solid rgba(42, 109, 217, 0.15);
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.825rem;
+      color: rgba(240, 243, 248, 0.5);
+      line-height: 1.6;
+    }
+
+    .modal-dagesh-info strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .modal-play-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .modal-play-btn:hover {
+      background: #3a7de9;
+      transform: translateY(-1px);
+    }
+
+    /* VOWELS */
+    .vowel-group {
+      margin-bottom: 2.5rem;
+    }
+
+    .vowel-group-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .vowel-group-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(42, 109, 217, 0.2);
+    }
+
+    .vowel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .vowel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .vowel-card:hover {
+      border-color: rgba(42, 109, 217, 0.4);
+      background: rgba(42, 109, 217, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .vowel-symbol {
+      font-size: 2.2rem;
+      direction: rtl;
+      display: block;
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+
+    .vowel-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .vowel-translit {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(240, 243, 248, 0.4);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .vowel-desc {
+      font-size: 0.7rem;
+      color: rgba(240, 243, 248, 0.35);
+      line-height: 1.4;
+    }
+
+    /* QUIZ */
+    .quiz-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3rem 2rem;
+      margin-bottom: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-question-letter {
+      font-size: 6rem;
+      direction: rtl;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-question-text {
+      font-size: 0.875rem;
+      color: rgba(240, 243, 248, 0.4);
+      font-weight: 300;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1rem;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--paper);
+      transition: all 0.15s;
+    }
+
+    .quiz-opt:hover {
+      background: rgba(42, 109, 217, 0.08);
+      border-color: rgba(42, 109, 217, 0.3);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(42, 109, 217, 0.18);
+      border-color: var(--accent);
+      color: #7aaef5;
+    }
+
+    .quiz-opt.wrong {
+      background: rgba(180, 50, 50, 0.12);
+      border-color: rgba(180, 50, 50, 0.4);
+      color: rgba(240, 100, 100, 0.8);
+    }
+
+    .quiz-opt:disabled {
+      pointer-events: none;
+    }
+
+    .quiz-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-stat {
+      text-align: center;
+    }
+
+    .quiz-stat .val {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent);
+      display: block;
+    }
+
+    .quiz-stat small {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240, 243, 248, 0.3);
+    }
+
+    .quiz-mode-bar {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .quiz-mode-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: rgba(240, 243, 248, 0.4);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-mode-btn:hover {
+      color: rgba(240, 243, 248, 0.8);
+    }
+
+    .quiz-mode-btn.active {
+      background: rgba(42, 109, 217, 0.12);
+      border-color: rgba(42, 109, 217, 0.4);
+      color: var(--accent);
+    }
+
+    .btn-next {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--accent);
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-next:hover {
+      background: #3a7de9;
+      transform: translateY(-2px);
+    }
+
+    .feedback-msg {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0.75rem 0;
+      min-height: 1.4rem;
+      transition: all 0.2s;
+    }
+
+    .feedback-msg.ok {
+      color: #7aaef5;
+    }
+
+    .feedback-msg.err {
+      color: rgba(240, 100, 100, 0.8);
+    }
+
+    /* DAGESH */
+    .dagesh-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .dagesh-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(42, 109, 217, 0.15);
+      border-radius: 4px;
+      padding: 1.25rem;
+    }
+
+    .dagesh-pair {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      direction: rtl;
+    }
+
+    .dagesh-pair .without {
+      font-size: 2.5rem;
+      color: rgba(240, 243, 248, 0.3);
+    }
+
+    .dagesh-pair .arrow {
+      font-size: 0.8rem;
+      color: rgba(240, 243, 248, 0.2);
+    }
+
+    .dagesh-pair .with {
+      font-size: 2.5rem;
+      color: var(--accent);
+    }
+
+    .dagesh-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .dagesh-card-rule {
+      font-size: 0.75rem;
+      color: rgba(240, 243, 248, 0.4);
+      line-height: 1.5;
+    }
+
+    /* FLASHCARD */
+    .flashcard-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .flashcard {
+      background: var(--card-bg);
+      border: 1px solid rgba(42, 109, 217, 0.25);
+      border-radius: 6px;
+      padding: 3.5rem 2rem;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flashcard:hover {
+      border-color: rgba(42, 109, 217, 0.5);
+      background: rgba(42, 109, 217, 0.05);
+    }
+
+    .flashcard .front {
+      display: block;
+    }
+
+    .flashcard .back {
+      display: none;
+    }
+
+    .flashcard.flipped .front {
+      display: none;
+    }
+
+    .flashcard.flipped .back {
+      display: block;
+    }
+
+    .flashcard-letter {
+      font-size: 5.5rem;
+      direction: rtl;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .flashcard-hint {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: rgba(240, 243, 248, 0.25);
+      text-transform: uppercase;
+    }
+
+    .flashcard-answer {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .flashcard-answer em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .flashcard-details {
+      font-size: 0.8rem;
+      color: rgba(240, 243, 248, 0.5);
+      line-height: 1.6;
+    }
+
+    .flashcard-nav {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .fc-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: rgba(240, 243, 248, 0.4);
+      padding: 0.65rem 1.25rem;
+      border-radius: 2px;
+      cursor: pointer;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .fc-btn:hover {
+      color: rgba(240, 243, 248, 0.8);
+      border-color: rgba(240, 243, 248, 0.25);
+    }
+
+    .fc-btn.primary {
+      background: rgba(42, 109, 217, 0.12);
+      border-color: rgba(42, 109, 217, 0.4);
+      color: var(--accent);
+    }
+
+    .fc-progress {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(240, 243, 248, 0.3);
+      letter-spacing: 0.1em;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 2px;
+      background: rgba(240, 243, 248, 0.08);
+      border-radius: 1px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 1px;
+      transition: width 0.3s ease;
+    }
+
+    /* TABLE */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead tr {
+      border-bottom: 1px solid rgba(42, 109, 217, 0.3);
+    }
+
+    th {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 400;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      color: rgba(240, 243, 248, 0.75);
+      border-bottom: 1px solid rgba(240, 243, 248, 0.04);
+    }
+
+    .td-heb {
+      font-size: 1.5rem;
+      direction: rtl;
+    }
+
+    tr:hover td {
+      background: rgba(42, 109, 217, 0.04);
+    }
+
+    /* SPEAKER ICON */
+    .icon-speak {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      vertical-align: middle;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav {
+        padding: 1rem;
+      }
+
+      .nav-tabs button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.6rem;
+      }
+
+      .section {
+        padding: 2rem 1rem;
+      }
+
+      .alphabet-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      }
+
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="glow"></div>
+  <div class="grid-bg"></div>
+
+  <nav>
+    <a href="#" class="logo">עברית<span>Biblical</span></a>
+    <ul class="nav-tabs">
+      <li><button class="active" onclick="showSection('home')">Início</button></li>
+      <li><button onclick="showSection('alef-bet')">Alef-Bet</button></li>
+      <li><button onclick="showSection('vogais')">Vogais</button></li>
+      <li><button onclick="showSection('dagesh')">Dagesh</button></li>
+      <li><button onclick="showSection('flashcards')">Flashcards</button></li>
+      <li><button onclick="showSection('quiz')">Quiz</button></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- HOME -->
+    <div id="home" class="section active">
+      <div class="hero">
+        <p class="mono-tag">Hebraico Bíblico</p>
+        <span class="hebrew-big">אבגדה</span>
+        <h1>Aprenda o<br><em>alfabeto sagrado</em></h1>
+        <p>22 consoantes, 5 formas finais sofit, dagesh forte e leve, sinais massoréticos — tudo num só lugar.</p>
+        <div class="hero-cards">
+          <div class="hero-card" onclick="showSection('alef-bet')">
+            <span class="num">22</span>
+            <small>Consoantes</small>
+          </div>
+          <div class="hero-card" onclick="showSection('alef-bet')">
+            <span class="num">5</span>
+            <small>Formas Sofit</small>
+          </div>
+          <div class="hero-card" onclick="showSection('dagesh')">
+            <span class="num">6</span>
+            <small>Com Dagesh</small>
+          </div>
+          <div class="hero-card" onclick="showSection('vogais')">
+            <span class="num">10+</span>
+            <small>Sinais Massoréticos</small>
+          </div>
+          <div class="hero-card" onclick="showSection('quiz')">
+            <span class="num">∞</span>
+            <small>Quiz Interativo</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALEF-BET -->
+    <div id="alef-bet" class="section">
+      <h2 class="section-title">O <em>Alef-Bet</em> Completo</h2>
+      <p class="section-sub">Clique em qualquer letra para ver detalhes e ouvir a pronúncia</p>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterLetters('all', this)">Todas</button>
+        <button class="filter-btn" onclick="filterLetters('sofit', this)">Formas Sofit</button>
+        <button class="filter-btn" onclick="filterLetters('dagesh', this)">Com Dagesh</button>
+        <button class="filter-btn" onclick="filterLetters('diacritic', this)">Diacrítico</button>
+      </div>
+
+      <div class="alphabet-grid" id="alphabet-grid"></div>
+    </div>
+
+    <!-- VOGAIS -->
+    <div id="vogais" class="section">
+      <h2 class="section-title">Sinais <em>Massoréticos</em></h2>
+      <p class="section-sub">As vogais adicionadas pelos massoretas para preservar a leitura do texto bíblico</p>
+
+      <div class="vowel-group">
+        <div class="vowel-group-title">Vogais Longas</div>
+        <div class="vowel-grid" id="vowels-long"></div>
+      </div>
+      <div class="vowel-group">
+        <div class="vowel-group-title">Vogais Curtas</div>
+        <div class="vowel-grid" id="vowels-short"></div>
+      </div>
+      <div class="vowel-group">
+        <div class="vowel-group-title">Vogais Ultracurtas (Shevas)</div>
+        <div class="vowel-grid" id="vowels-sheva"></div>
+      </div>
+      <div class="vowel-group">
+        <div class="vowel-group-title">Outros Sinais</div>
+        <div class="vowel-grid" id="vowels-other"></div>
+      </div>
+
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.3rem; margin:2rem 0 1rem; letter-spacing:-0.02em;">
+        Tabela <em style="color:var(--accent); font-style:italic;">Completa</em>
+      </h3>
+      <div class="table-wrap">
+        <table id="vowels-table"></table>
+      </div>
+    </div>
+
+    <!-- DAGESH -->
+    <div id="dagesh" class="section">
+      <h2 class="section-title">Dagesh & <em>Modificações</em></h2>
+      <p class="section-sub">3 letras modificadas pelo Dagesh Forte · 1 modificada pelo sinal diacrítico · 5 formas Sofit</p>
+
+      <div class="vowel-group-title" style="margin-bottom:1rem;">Bgdkft — Dagesh Leve (enrijece o som)</div>
+      <div class="dagesh-grid" id="dagesh-grid"></div>
+
+      <div class="vowel-group-title" style="margin: 2rem 0 1rem;">As 5 Formas Finais (Sofit)</div>
+      <div class="dagesh-grid" id="sofit-grid"></div>
+
+      <div class="vowel-group-title" style="margin: 2rem 0 1rem;">Modificação por Sinal Diacrítico</div>
+      <div class="dagesh-grid" id="diacritic-grid"></div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div id="flashcards" class="section">
+      <h2 class="section-title"><em>Flashcards</em> Interativos</h2>
+      <p class="section-sub">Clique no cartão para revelar a resposta</p>
+
+      <div class="quiz-mode-bar">
+        <button class="quiz-mode-btn active" onclick="setFCMode('heb-to-name', this)">Letra → Nome</button>
+        <button class="quiz-mode-btn" onclick="setFCMode('name-to-heb', this)">Nome → Letra</button>
+        <button class="quiz-mode-btn" onclick="setFCMode('heb-to-translit', this)">Letra → Translit.</button>
+      </div>
+
+      <div class="flashcard-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="fc-progress-fill"></div>
+        </div>
+
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+          <div class="front">
+            <span class="flashcard-letter" id="fc-front-letter"></span>
+            <span class="flashcard-hint">Clique para revelar</span>
+          </div>
+          <div class="back">
+            <span class="flashcard-answer" id="fc-back-answer"></span>
+            <span class="flashcard-details" id="fc-back-details"></span>
+          </div>
+        </div>
+
+        <div class="flashcard-nav">
+          <button class="fc-btn" onclick="fcNav(-1)">← Anterior</button>
+          <span class="fc-progress" id="fc-progress-text"></span>
+          <button class="fc-btn primary" onclick="fcNav(1)">Próxima →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quiz" class="section">
+      <h2 class="section-title">Quiz <em>Interativo</em></h2>
+      <p class="section-sub">Teste seus conhecimentos do alfabeto hebraico</p>
+
+      <div class="quiz-stats">
+        <div class="quiz-stat"><span class="val" id="q-score">0</span><small>Acertos</small></div>
+        <div class="quiz-stat"><span class="val" id="q-total">0</span><small>Total</small></div>
+        <div class="quiz-stat"><span class="val" id="q-streak">0</span><small>Sequência</small></div>
+      </div>
+
+      <div class="quiz-mode-bar">
+        <button class="quiz-mode-btn active" onclick="setQuizMode('name', this)">Letra → Nome</button>
+        <button class="quiz-mode-btn" onclick="setQuizMode('translit', this)">Letra → Translit.</button>
+        <button class="quiz-mode-btn" onclick="setQuizMode('heb', this)">Nome → Letra</button>
+      </div>
+
+      <div class="quiz-wrap">
+        <div class="quiz-card">
+          <div id="quiz-question-letter" class="quiz-question-letter"></div>
+          <p class="quiz-question-text" id="quiz-question-text"></p>
+        </div>
+
+        <p class="feedback-msg" id="quiz-feedback"></p>
+
+        <div class="quiz-options" id="quiz-options"></div>
+
+        <button class="btn-next" id="quiz-next" onclick="nextQuestion()" style="display:none;">
+          Próxima
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <span class="modal-letter-big" id="m-letter"></span>
+      <div class="modal-sofit" id="m-sofit-wrap" style="display:none">
+        <span class="sofit-char" id="m-sofit-char"></span>
+        <small>Forma final (sofit)</small>
+      </div>
+      <div class="modal-name" id="m-name"></div>
+      <div class="modal-meta" id="m-meta"></div>
+      <p class="modal-desc" id="m-desc"></p>
+      <div class="modal-dagesh-info" id="m-dagesh" style="display:none"></div>
+      <button class="modal-play-btn" onclick="speakLetter()">
+        <svg class="icon-speak" viewBox="0 0 24 24">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+        </svg>
+        Ouvir pronúncia
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // =====================
+    // DATA
+    // =====================
+    const letters = [
+      { id: 1, heb: 'א', name: 'Alef', translit: "'", num: 1, type: 'normal', desc: 'Consoante gutural quiescente. Na maioria dos contextos bíblicos funciona como suporte de vogal, sendo essencialmente muda. É a primeira letra do alfabeto.', dageshInfo: null, sofit: null },
+      { id: 2, heb: 'בּ', name: 'Bet', translit: 'b/v', num: 2, type: 'dagesh', desc: 'Pronuncia-se "b" com dagesh (בּ) e "v" sem dagesh (ב). Uma das seis letras BeGaDKePhaT.', dageshInfo: '<strong>Com Dagesh (בּ):</strong> som "b" (oclusivo bilabial)<br><strong>Sem Dagesh (ב):</strong> som "v" (fricativo bilabial)', sofit: null },
+      { id: 3, heb: 'גּ', name: 'Gimel', translit: 'g', num: 3, type: 'dagesh', desc: 'Pronuncia-se "g" (como em gato). Com dagesh é sempre oclusiva; sem dagesh pode ter som fricativo dependendo da tradição.', dageshInfo: '<strong>Com Dagesh (גּ):</strong> "g" oclusivo<br><strong>Sem Dagesh (ג):</strong> pode ser fricativo em algumas tradições', sofit: null },
+      { id: 4, heb: 'דּ', name: 'Dalet', translit: 'd', num: 4, type: 'dagesh', desc: 'Pronuncia-se "d". Uma das seis letras BeGaDKePhaT. Com dagesh é oclusiva; sem dagesh pode soar como "dh" em inglês "the".', dageshInfo: '<strong>Com Dagesh (דּ):</strong> "d" oclusivo<br><strong>Sem Dagesh (ד):</strong> fricativo dental em algumas tradições', sofit: null },
+      { id: 5, heb: 'ה', name: 'He', translit: 'h', num: 5, type: 'normal', desc: 'Pronuncia-se como "h" aspirado. No final de palavras frequentemente é muda. Também pode funcionar como letra mater lectionis para a vogal "a".', sofit: null },
+      { id: 6, heb: 'ו', name: 'Vav', translit: 'v/w', num: 6, type: 'normal', desc: 'Pronuncia-se "v" (tradição asquenazita) ou "w" (tradição sefaradita e acadêmica). Também serve como mater lectionis para vogais "o" e "u".', sofit: null },
+      { id: 7, heb: 'ז', name: 'Zayin', translit: 'z', num: 7, type: 'normal', desc: 'Pronuncia-se "z" como em zebra. Consoante fricativa alveolar sonora.', sofit: null },
+      { id: 8, heb: 'ח', name: 'Het', translit: 'ḥ', num: 8, type: 'normal', desc: 'Fricativa gutural forte, pronunciada na faringe. Semelhante ao "ch" alemão em "Bach". Distinta do He e do Ayin.', sofit: null },
+      { id: 9, heb: 'טּ', name: 'Tet', translit: 'ṭ', num: 9, type: 'diacritic', desc: 'T enfático. Na pronúncia moderna soa como "t" simples, mas originalmente era uma consoante faringalizada. O ponto inferior indica o sinal diacrítico diferenciador.', dageshInfo: '<strong>Ponto diacrítico:</strong> diferencia o Tet (ט) do Tav (ת), ambos com som "t" no hebraico moderno mas distintos na escrita bíblica.', sofit: null },
+      { id: 10, heb: 'י', name: 'Yod', translit: 'y', num: 10, type: 'normal', desc: 'Pronuncia-se "y" como em "yes". A menor letra do alfabeto. Também funciona como mater lectionis para a vogal "i".', sofit: null },
+      { id: 11, heb: 'כּ', name: 'Kaf', translit: 'k/kh', num: 20, type: 'dagesh', sofit: 'ך', desc: 'Com dagesh: "k". Sem dagesh: "kh" (como "ch" em Bach). Uma das BeGaDKePhaT. Tem forma final Sofit (ך).', dageshInfo: '<strong>Com Dagesh (כּ):</strong> "k" oclusivo<br><strong>Sem Dagesh (כ):</strong> "kh" fricativo velar<br><strong>Forma Sofit (ך):</strong> usada ao final de palavras' },
+      { id: 12, heb: 'ל', name: 'Lamed', translit: 'l', num: 30, type: 'normal', desc: 'Pronuncia-se "l". É a letra mais alta do alfabeto hebraico. Consoante lateral alveolar.', sofit: null },
+      { id: 13, heb: 'מ', name: 'Mem', translit: 'm', num: 40, type: 'normal', sofit: 'ם', desc: 'Pronuncia-se "m". Tem forma final Sofit (ם) usada ao final de palavras. Consoante nasal bilabial.' },
+      { id: 14, heb: 'נ', name: 'Nun', translit: 'n', num: 50, type: 'normal', sofit: 'ן', desc: 'Pronuncia-se "n". Tem forma final Sofit (ן) usada ao final de palavras. Consoante nasal alveolar.' },
+      { id: 15, heb: 'ס', name: 'Samek', translit: 's', num: 60, type: 'normal', desc: 'Pronuncia-se "s". Consoante fricativa alveolar surda. Distinta do Sin/Shin.', sofit: null },
+      { id: 16, heb: 'ע', name: 'Ayin', translit: "'", num: 70, type: 'normal', desc: 'Consoante gutural faríngea. No hebraico moderno é frequentemente muda, mas originalmente era uma oclusiva faríngea sonora. Importante distinguir do Alef.', sofit: null },
+      { id: 17, heb: 'פּ', name: 'Pe', translit: 'p/f', num: 80, type: 'dagesh', sofit: 'ף', desc: 'Com dagesh: "p". Sem dagesh: "f". Uma das BeGaDKePhaT. Tem forma final Sofit (ף).', dageshInfo: '<strong>Com Dagesh (פּ):</strong> "p" oclusivo<br><strong>Sem Dagesh (פ):</strong> "f" fricativo labiodental<br><strong>Forma Sofit (ף):</strong> usada ao final de palavras' },
+      { id: 18, heb: 'צ', name: 'Tsade', translit: 'ṣ', num: 90, type: 'normal', sofit: 'ץ', desc: 'Pronuncia-se "ts" (como em "tsarévich"). É um africado alveolar surdo. Tem forma final Sofit (ץ).' },
+      { id: 19, heb: 'ק', name: 'Qof', translit: 'q', num: 100, type: 'normal', desc: 'Pronuncia-se como "k" uvular (mais ao fundo da garganta que o Kaf). No hebraico moderno indistinguível do Kaf.', sofit: null },
+      { id: 20, heb: 'ר', name: 'Resh', translit: 'r', num: 200, type: 'normal', desc: 'Pronuncia-se como "r". No hebraico bíblico era provavelmente vibrante alveolar; no moderno é uvular (como o "r" francês).', sofit: null },
+      { id: 21, heb: 'שׁ', name: 'Shin/Sin', translit: 'š/ś', num: 300, type: 'diacritic', desc: 'Shin (שׁ) tem ponto à direita e pronuncia-se "sh". Sin (שׂ) tem ponto à esquerda e pronuncia-se "s". A mesma letra com sinal diacrítico diferenciador.', dageshInfo: '<strong>Shin (שׁ) — ponto direito:</strong> som "sh" (fricativo palatal)<br><strong>Sin (שׂ) — ponto esquerdo:</strong> som "s" (fricativo alveolar)' },
+      { id: 22, heb: 'תּ', name: 'Tav', translit: 't/th', num: 400, type: 'dagesh', desc: 'Com dagesh: "t". Sem dagesh: "th" (como em inglês "thin") em algumas tradições. Uma das BeGaDKePhaT. Última letra do alfabeto.', dageshInfo: '<strong>Com Dagesh (תּ):</strong> "t" oclusivo<br><strong>Sem Dagesh (ת):</strong> "th" fricativo em tradições conservadoras' },
+    ];
+
+    const vowels = {
+      long: [
+        { sym: 'בָ', name: 'Qamats', translit: 'ā', desc: 'A longa. Traço vertical sob a letra.' },
+        { sym: 'בֵ', name: 'Tsere', translit: 'ē', desc: 'E longa. Dois pontos horizontais.' },
+        { sym: 'בִי', name: 'Hiriq Gadol', translit: 'ī', desc: 'I longa. Ponto com Yod.' },
+        { sym: 'בֹ', name: 'Holam Haser', translit: 'ō', desc: 'O longa. Ponto acima da letra.' },
+        { sym: 'בוֹ', name: 'Holam Male', translit: 'ō', desc: 'O longa plena. Ponto com Vav.' },
+        { sym: 'בוּ', name: 'Shuruq', translit: 'ū', desc: 'U longa. Vav com dagesh.' },
+      ],
+      short: [
+        { sym: 'בַ', name: 'Patah', translit: 'a', desc: 'A curta. Traço horizontal.' },
+        { sym: 'בֶ', name: 'Seré Haser', translit: 'e', desc: 'E curta. Dois pontos sem Yod.' },
+        { sym: 'בִ', name: 'Hiriq Qatan', translit: 'i', desc: 'I curta. Ponto simples.' },
+        { sym: 'בָ', name: 'Qamats Qatan', translit: 'ŏ', desc: 'O curta. Idêntico ao Qamats; contexto diferencia.' },
+        { sym: 'בֻ', name: 'Qibbuts', translit: 'u', desc: 'U curta. Três pontos diagonais.' },
+      ],
+      sheva: [
+        { sym: 'בְ', name: 'Sheva', translit: 'ə/—', desc: 'Mudo ou móvel. Dois pontos verticais.' },
+        { sym: 'בֱ', name: 'Hataf Patah', translit: 'ă', desc: 'A ultracurta. Sheva + Patah.' },
+        { sym: 'בֲ', name: 'Hataf Seré', translit: 'ĕ', desc: 'E ultracurta. Sheva + Seré.' },
+        { sym: 'בֳ', name: 'Hataf Qamats', translit: 'ŏ', desc: 'O ultracurta. Sheva + Qamats.' },
+      ],
+      other: [
+        { sym: 'בּ', name: 'Dagesh', translit: '—', desc: 'Ponto no interior da letra. Forte: duplica. Leve: em BeGaDKePhaT.' },
+        { sym: 'בֽ', name: 'Meteg', translit: '—', desc: 'Traço vertical lateral. Marca sílaba secundária ou vogal longa.' },
+        { sym: 'בּׁ', name: 'Shin Dot', translit: '—', desc: 'Ponto sobre a letra Shin à direita = Shin (sh).' },
+        { sym: 'שׂ', name: 'Sin Dot', translit: '—', desc: 'Ponto sobre a letra Shin à esquerda = Sin (s).' },
+        { sym: 'בּ֑', name: 'Acento Silluq', translit: '—', desc: 'Acento massorético de pausa. Marca fim de verso.' },
+        { sym: 'בּ֥', name: 'Merkha', translit: '—', desc: 'Acento conjuntivo (servo). Precede o acento principal.' },
+      ]
+    };
+
+    const dageshLetters = [
+      { heb: 'ב', hebD: 'בּ', name: 'Bet', rule: 'Sem dagesh: "v" (fricativo). Com dagesh: "b" (oclusivo).', sofit: null },
+      { heb: 'ג', hebD: 'גּ', name: 'Gimel', rule: 'Sem dagesh: fricativo. Com dagesh: "g" oclusivo.', sofit: null },
+      { heb: 'ד', hebD: 'דּ', name: 'Dalet', rule: 'Sem dagesh: fricativo dental. Com dagesh: "d" oclusivo.', sofit: null },
+      { heb: 'כ', hebD: 'כּ', name: 'Kaf', rule: 'Sem dagesh: "kh". Com dagesh: "k". Tem forma sofit ך.', sofit: 'ך' },
+      { heb: 'פ', hebD: 'פּ', name: 'Pe', rule: 'Sem dagesh: "f". Com dagesh: "p". Tem forma sofit ף.', sofit: 'ף' },
+      { heb: 'ת', hebD: 'תּ', name: 'Tav', rule: 'Sem dagesh: "th" (algumas tradições). Com dagesh: "t".', sofit: null },
+    ];
+
+    const sofitLetters = [
+      { heb: 'כ', sofit: 'ך', name: 'Kaf Sofit', desc: 'Kaf no final de palavra.' },
+      { heb: 'מ', sofit: 'ם', name: 'Mem Sofit', desc: 'Mem no final de palavra. Forma fechada.' },
+      { heb: 'נ', sofit: 'ן', name: 'Nun Sofit', desc: 'Nun no final de palavra.' },
+      { heb: 'פ', sofit: 'ף', name: 'Pe Sofit', desc: 'Pe no final de palavra.' },
+      { heb: 'צ', sofit: 'ץ', name: 'Tsade Sofit', desc: 'Tsade no final de palavra.' },
+    ];
+
+    const diacriticLetters = [
+      { heb: 'ש', hebD: 'שׁ / שׂ', name: 'Shin / Sin', desc: 'Mesmo caractere, dois sons distintos. Ponto à direita = Shin (sh). Ponto à esquerda = Sin (s). Distinção essencial no hebraico bíblico.', sofit: null },
+    ];
+
+    // =====================
+    // RENDER
+    // =====================
+    function renderAlphabet(filter = 'all') {
+      const grid = document.getElementById('alphabet-grid');
+      grid.innerHTML = '';
+      letters.forEach(l => {
+        if (filter !== 'all') {
+          if (filter === 'sofit' && !l.sofit) return;
+          if (filter === 'dagesh' && l.type !== 'dagesh') return;
+          if (filter === 'diacritic' && l.type !== 'diacritic') return;
+        }
+        const div = document.createElement('div');
+        div.className = `letter-card ${l.type !== 'normal' ? l.type : ''}`;
+        let badge = '';
+        if (l.sofit) badge += `<span class="letter-badge" style="background:rgba(122,174,245,0.1);color:#7aaef5;border:1px solid rgba(122,174,245,0.2);margin-right:3px">Sofit</span>`;
+        if (l.type === 'dagesh') badge += `<span class="letter-badge" style="background:rgba(42,109,217,0.1);color:var(--accent);border:1px solid rgba(42,109,217,0.2);">Dagesh</span>`;
+        if (l.type === 'diacritic') badge += `<span class="letter-badge" style="background:rgba(100,160,255,0.1);color:#64a0ff;border:1px solid rgba(100,160,255,0.2);">Diacrítico</span>`;
+
+        div.innerHTML = `
+      <span class="letter-num">${l.num}</span>
+      <span class="letter-heb">${l.heb}</span>
+      <span class="letter-name">${l.name}</span>
+      <span class="letter-translit">${l.translit}</span>
+      ${badge}
+      <br>
+      <button class="sound-btn" onclick="event.stopPropagation(); speakText('${l.name}')">
+        <svg class="icon-speak" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        Ouvir
+      </button>
+    `;
+        div.onclick = () => openModal(l);
+        grid.appendChild(div);
+      });
+    }
+
+    function renderVowels() {
+      renderVowelGroup('vowels-long', vowels.long);
+      renderVowelGroup('vowels-short', vowels.short);
+      renderVowelGroup('vowels-sheva', vowels.sheva);
+      renderVowelGroup('vowels-other', vowels.other);
+      renderVowelTable();
+    }
+
+    function renderVowelGroup(id, list) {
+      const wrap = document.getElementById(id);
+      wrap.innerHTML = list.map(v => `
+    <div class="vowel-card" onclick="speakText('${v.name}')">
+      <span class="vowel-symbol">${v.sym}</span>
+      <span class="vowel-name">${v.name}</span>
+      <span class="vowel-translit">${v.translit}</span>
+      <span class="vowel-desc">${v.desc}</span>
+    </div>
+  `).join('');
+    }
+
+    function renderVowelTable() {
+      const all = [...vowels.long, ...vowels.short, ...vowels.sheva, ...vowels.other];
+      const table = document.getElementById('vowels-table');
+      table.innerHTML = `
+    <thead><tr>
+      <th>Símbolo</th><th>Nome</th><th>Transliteração</th><th>Descrição</th><th>Ouvir</th>
+    </tr></thead>
+    <tbody>${all.map(v => `
+      <tr>
+        <td class="td-heb">${v.sym}</td>
+        <td style="font-family:'Playfair Display',serif;font-weight:700">${v.name}</td>
+        <td><span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--accent)">${v.translit}</span></td>
+        <td style="font-size:0.8rem;color:rgba(240,243,248,0.5)">${v.desc}</td>
+        <td><button class="sound-btn" onclick="speakText('${v.name}')"><svg class="icon-speak" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg></button></td>
+      </tr>
+    `).join('')}</tbody>
+  `;
+    }
+
+    function renderDagesh() {
+      const g = document.getElementById('dagesh-grid');
+      g.innerHTML = dageshLetters.map(l => `
+    <div class="dagesh-card">
+      <div class="dagesh-pair">
+        <span class="with">${l.hebD}</span>
+        <span class="arrow">←</span>
+        <span class="without">${l.heb}</span>
+      </div>
+      <div class="dagesh-card-name">${l.name}</div>
+      <div class="dagesh-card-rule">${l.rule}</div>
+    </div>
+  `).join('');
+
+      const sg = document.getElementById('sofit-grid');
+      sg.innerHTML = sofitLetters.map(l => `
+    <div class="dagesh-card">
+      <div class="dagesh-pair">
+        <span class="with" style="color:#7aaef5">${l.sofit}</span>
+        <span class="arrow">←</span>
+        <span class="without">${l.heb}</span>
+      </div>
+      <div class="dagesh-card-name">${l.name}</div>
+      <div class="dagesh-card-rule">${l.desc}</div>
+    </div>
+  `).join('');
+
+      const dg = document.getElementById('diacritic-grid');
+      dg.innerHTML = diacriticLetters.map(l => `
+    <div class="dagesh-card" style="border-color:rgba(100,160,255,0.2)">
+      <div style="text-align:center;font-size:2.2rem;direction:rtl;margin-bottom:0.75rem;color:#64a0ff">${l.hebD}</div>
+      <div class="dagesh-card-name">${l.name}</div>
+      <div class="dagesh-card-rule">${l.desc}</div>
+    </div>
+  `).join('');
+    }
+
+    // =====================
+    // MODAL
+    // =====================
+    let currentSpeakText = '';
+
+    function openModal(l) {
+      document.getElementById('m-letter').textContent = l.heb;
+      document.getElementById('m-name').textContent = l.name;
+
+      const sofitWrap = document.getElementById('m-sofit-wrap');
+      if (l.sofit) {
+        sofitWrap.style.display = 'block';
+        document.getElementById('m-sofit-char').textContent = l.sofit;
+      } else {
+        sofitWrap.style.display = 'none';
+      }
+
+      const meta = document.getElementById('m-meta');
+      meta.innerHTML = `
+    <span class="meta-tag blue">Valor: ${l.num}</span>
+    <span class="meta-tag light">/${l.translit}/</span>
+    <span class="meta-tag muted">${l.type === 'dagesh' ? 'BeGaDKePhaT' : l.type === 'diacritic' ? 'Diacrítico' : l.type === 'sofit' ? 'Sofit' : 'Regular'}</span>
+  `;
+
+      document.getElementById('m-desc').textContent = l.desc;
+
+      const dagesh = document.getElementById('m-dagesh');
+      if (l.dageshInfo) {
+        dagesh.style.display = 'block';
+        dagesh.innerHTML = l.dageshInfo;
+      } else {
+        dagesh.style.display = 'none';
+      }
+
+      currentSpeakText = l.name;
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('modal')) closeModalDirect();
+    }
+
+    function closeModalDirect() {
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    function speakLetter() { speakText(currentSpeakText); }
+
+    function speakText(text) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'he-IL';
+      utterance.rate = 0.8;
+      // Fallback to en-US if no he-IL voice
+      const voices = speechSynthesis.getVoices();
+      const heVoice = voices.find(v => v.lang.startsWith('he'));
+      if (heVoice) utterance.voice = heVoice;
+      else utterance.lang = 'en-US';
+      speechSynthesis.speak(utterance);
+    }
+
+    // =====================
+    // NAVIGATION
+    // =====================
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.nav-tabs button').forEach(b => {
+        if (b.textContent.toLowerCase().includes(id.replace('-', ' ').toLowerCase()) ||
+          (id === 'home' && b.textContent === 'Início') ||
+          (id === 'alef-bet' && b.textContent === 'Alef-Bet') ||
+          (id === 'vogais' && b.textContent === 'Vogais') ||
+          (id === 'dagesh' && b.textContent === 'Dagesh') ||
+          (id === 'flashcards' && b.textContent === 'Flashcards') ||
+          (id === 'quiz' && b.textContent === 'Quiz')
+        ) b.classList.add('active');
+      });
+    }
+
+    function filterLetters(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAlphabet(type);
+    }
+
+    // =====================
+    // FLASHCARDS
+    // =====================
+    let fcMode = 'heb-to-name';
+    let fcIndex = 0;
+    let fcFlipped = false;
+
+    function setFCMode(mode, btn) {
+      fcMode = mode;
+      document.querySelectorAll('.quiz-mode-bar .quiz-mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      fcIndex = 0;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const l = letters[fcIndex];
+      const card = document.getElementById('flashcard');
+      card.classList.remove('flipped');
+      fcFlipped = false;
+
+      if (fcMode === 'heb-to-name') {
+        document.getElementById('fc-front-letter').textContent = l.heb;
+        document.getElementById('fc-back-answer').innerHTML = `<em>${l.name}</em>`;
+        document.getElementById('fc-back-details').innerHTML = `Transliteração: /${l.translit}/ · Valor numérico: ${l.num}${l.sofit ? `<br>Forma sofit: ${l.sofit}` : ''}`;
+      } else if (fcMode === 'name-to-heb') {
+        document.getElementById('fc-front-letter').textContent = l.name;
+        document.getElementById('fc-back-answer').innerHTML = `<em>${l.heb}</em>`;
+        document.getElementById('fc-back-details').innerHTML = `/${l.translit}/ · Valor: ${l.num}`;
+      } else {
+        document.getElementById('fc-front-letter').textContent = l.heb;
+        document.getElementById('fc-back-answer').innerHTML = `<em>/${l.translit}/</em>`;
+        document.getElementById('fc-back-details').textContent = l.name;
+      }
+
+      const fill = ((fcIndex + 1) / letters.length) * 100;
+      document.getElementById('fc-progress-fill').style.width = fill + '%';
+      document.getElementById('fc-progress-text').textContent = `${fcIndex + 1} / ${letters.length}`;
+    }
+
+    function flipCard() {
+      const card = document.getElementById('flashcard');
+      card.classList.toggle('flipped');
+      fcFlipped = !fcFlipped;
+    }
+
+    function fcNav(dir) {
+      fcIndex = (fcIndex + dir + letters.length) % letters.length;
+      renderFlashcard();
+    }
+
+    // =====================
+    // QUIZ
+    // =====================
+    let quizMode = 'name';
+    let quizScore = 0;
+    let quizTotal = 0;
+    let quizStreak = 0;
+    let quizCurrent = null;
+    let quizAnswered = false;
+
+    function setQuizMode(mode, btn) {
+      quizMode = mode;
+      document.querySelectorAll('#quiz .quiz-mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      quizAnswered = false;
+      document.getElementById('quiz-next').style.display = 'none';
+      document.getElementById('quiz-feedback').textContent = '';
+      document.getElementById('quiz-feedback').className = 'feedback-msg';
+
+      const shuffled = [...letters].sort(() => Math.random() - 0.5);
+      quizCurrent = shuffled[0];
+      const options = [quizCurrent, ...shuffled.slice(1, 4)].sort(() => Math.random() - 0.5);
+
+      if (quizMode === 'name') {
+        document.getElementById('quiz-question-letter').textContent = quizCurrent.heb;
+        document.getElementById('quiz-question-text').textContent = 'Qual é o nome desta letra?';
+        renderOptions(options.map(o => ({ val: o.name, correct: o.name === quizCurrent.name })));
+      } else if (quizMode === 'translit') {
+        document.getElementById('quiz-question-letter').textContent = quizCurrent.heb;
+        document.getElementById('quiz-question-text').textContent = 'Qual é a transliteração desta letra?';
+        renderOptions(options.map(o => ({ val: `/${o.translit}/`, correct: o.name === quizCurrent.name })));
+      } else {
+        document.getElementById('quiz-question-letter').textContent = quizCurrent.name;
+        document.getElementById('quiz-question-letter').style.fontSize = '2rem';
+        document.getElementById('quiz-question-text').textContent = 'Qual é a letra hebraica?';
+        renderOptions(options.map(o => ({ val: o.heb, correct: o.name === quizCurrent.name })));
+      }
+    }
+
+    function renderOptions(opts) {
+      const wrap = document.getElementById('quiz-options');
+      wrap.innerHTML = '';
+      opts.forEach(o => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = o.val;
+        btn.onclick = () => checkAnswer(btn, o.correct, opts);
+        wrap.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(btn, correct, opts) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      quizTotal++;
+
+      const feedback = document.getElementById('quiz-feedback');
+      if (correct) {
+        btn.classList.add('correct');
+        quizScore++;
+        quizStreak++;
+        feedback.textContent = '✓ Correto!';
+        feedback.className = 'feedback-msg ok';
+      } else {
+        btn.classList.add('wrong');
+        quizStreak = 0;
+        feedback.textContent = `✗ Errado. Era: ${quizCurrent.name} (${quizCurrent.heb})`;
+        feedback.className = 'feedback-msg err';
+        // Highlight correct
+        document.querySelectorAll('.quiz-opt').forEach((b, i) => {
+          if (opts[i] && opts[i].correct) b.classList.add('correct');
+        });
+      }
+
+      document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+      document.getElementById('q-score').textContent = quizScore;
+      document.getElementById('q-total').textContent = quizTotal;
+      document.getElementById('q-streak').textContent = quizStreak;
+      document.getElementById('quiz-next').style.display = 'inline-flex';
+    }
+
+    // =====================
+    // INIT
+    // =====================
+    renderAlphabet();
+    renderVowels();
+    renderDagesh();
+    renderFlashcard();
+    nextQuestion();
+
+    // Load voices async
+    if (window.speechSynthesis) {
+      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+    }
+  </script>
+</body>
+
+</html>
