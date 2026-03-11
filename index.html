@@ -1113,27 +1113,264 @@
       vertical-align: middle;
     }
 
+    /* BOTTOM NAV MOBILE */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(13, 15, 20, 0.97);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom));
+      justify-content: space-around;
+    }
+
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: rgba(240, 243, 248, 0.35);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      min-width: 52px;
+    }
+
+    .bottom-nav button svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+    }
+
+    .bottom-nav button.active {
+      color: var(--accent);
+    }
+
     /* RESPONSIVE */
-    @media (max-width: 640px) {
-      nav {
-        padding: 1rem;
+    @media (max-width: 700px) {
+
+      /* Hide desktop nav tabs, show bottom nav */
+      .nav-tabs {
+        display: none;
       }
 
-      .nav-tabs button {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.6rem;
+      .bottom-nav {
+        display: flex;
+      }
+
+      nav {
+        padding: 0.9rem 1.25rem;
+        justify-content: center;
+      }
+
+      main {
+        padding-top: 4rem;
+        padding-bottom: 5rem;
       }
 
       .section {
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
       }
 
+      /* Hero */
+      .hero {
+        padding: 2rem 1rem 1.5rem;
+      }
+
+      .hero .hebrew-big {
+        font-size: clamp(2.5rem, 18vw, 5rem);
+      }
+
+      .hero h1 {
+        font-size: clamp(1.8rem, 7vw, 3rem);
+      }
+
+      .hero p {
+        font-size: 0.875rem;
+      }
+
+      .hero-cards {
+        gap: 0.6rem;
+      }
+
+      .hero-card {
+        min-width: 100px;
+        padding: 1rem 0.75rem;
+      }
+
+      .hero-card .num {
+        font-size: 1.6rem;
+      }
+
+      /* Section titles */
+      .section-title {
+        font-size: 1.4rem;
+      }
+
+      /* Alphabet */
       .alphabet-grid {
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+
+      .letter-card {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .letter-heb {
+        font-size: 2rem;
+      }
+
+      .letter-name {
+        font-size: 0.75rem;
+      }
+
+      .sound-btn {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+      }
+
+      /* Filter bar */
+      .filter-bar {
+        gap: 0.35rem;
+      }
+
+      .filter-btn {
+        font-size: 0.6rem;
+        padding: 0.35rem 0.6rem;
+      }
+
+      /* Modal */
+      .modal {
+        padding: 1.75rem 1.25rem;
+        margin: 0.5rem;
+      }
+
+      .modal-letter-big {
+        font-size: 4rem;
+      }
+
+      .modal-name {
+        font-size: 1.25rem;
+      }
+
+      /* Vowels */
+      .vowel-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+
+      .vowel-card {
+        padding: 0.9rem 0.75rem;
+      }
+
+      .vowel-symbol {
+        font-size: 1.8rem;
+      }
+
+      /* Dagesh */
+      .dagesh-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+      }
+
+      /* Table — hide on mobile, show cards instead */
+      .table-wrap {
+        display: none;
+      }
+
+      /* Flashcard */
+      .flashcard-wrap {
+        padding: 0 0.5rem;
+      }
+
+      .flashcard {
+        padding: 2.5rem 1.25rem;
+        min-height: 200px;
+      }
+
+      .flashcard-letter {
+        font-size: 4.5rem;
+      }
+
+      .flashcard-answer {
+        font-size: 1.4rem;
+      }
+
+      .flashcard-nav {
+        gap: 0.5rem;
+      }
+
+      .fc-btn {
+        padding: 0.55rem 0.9rem;
+        font-size: 0.65rem;
+      }
+
+      /* Quiz */
+      .quiz-wrap {
+        padding: 0 0.25rem;
+      }
+
+      .quiz-card {
+        padding: 2rem 1.25rem;
+        min-height: 180px;
+      }
+
+      .quiz-question-letter {
+        font-size: 4.5rem;
       }
 
       .quiz-options {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+
+      .quiz-opt {
+        padding: 0.85rem 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .quiz-stats {
+        gap: 1.25rem;
+      }
+
+      .quiz-stat .val {
+        font-size: 1.6rem;
+      }
+
+      .quiz-mode-bar {
+        gap: 0.35rem;
+      }
+
+      .quiz-mode-btn {
+        font-size: 0.6rem;
+        padding: 0.4rem 0.6rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .alphabet-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .vowel-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-card {
+        min-width: 80px;
       }
     }
   </style>
@@ -1145,7 +1382,7 @@
   <div class="grid-bg"></div>
 
   <nav>
-    <a href="#" class="logo">עברית<span>Biblico</span></a>
+    <a href="#" class="logo">עברית<span>Biblical</span></a>
     <ul class="nav-tabs">
       <li><button class="active" onclick="showSection('home')">Início</button></li>
       <li><button onclick="showSection('alef-bet')">Alef-Bet</button></li>
@@ -1155,6 +1392,52 @@
       <li><button onclick="showSection('quiz')">Quiz</button></li>
     </ul>
   </nav>
+
+  <!-- BOTTOM NAV (mobile only) -->
+  <div class="bottom-nav" id="bottom-nav">
+    <button class="active" onclick="showSection('home')">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+      Início
+    </button>
+    <button onclick="showSection('alef-bet')">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18M9 21V9" />
+      </svg>
+      Alef-Bet
+    </button>
+    <button onclick="showSection('vogais')">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M8 12h8M12 8v8" />
+      </svg>
+      Vogais
+    </button>
+    <button onclick="showSection('dagesh')">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" />
+      </svg>
+      Dagesh
+    </button>
+    <button onclick="showSection('flashcards')">
+      <svg viewBox="0 0 24 24">
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+      Cards
+    </button>
+    <button onclick="showSection('quiz')">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
+      </svg>
+      Quiz
+    </button>
+  </div>
 
   <main>
     <!-- HOME -->
@@ -1587,17 +1870,31 @@
     function speakLetter() { speakText(currentSpeakText); }
 
     function speakText(text) {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'he-IL';
-      utterance.rate = 0.8;
-      // Fallback to en-US if no he-IL voice
-      const voices = speechSynthesis.getVoices();
-      const heVoice = voices.find(v => v.lang.startsWith('he'));
-      if (heVoice) utterance.voice = heVoice;
-      else utterance.lang = 'en-US';
-      speechSynthesis.speak(utterance);
+      // Use Google Translate TTS — works on any device, no install needed
+      const hebrewNames = {
+        'Alef': 'אָלֶף', 'Bet': 'בֵּית', 'Gimel': 'גִּימֶל', 'Dalet': 'דָּלֶת', 'He': 'הֵא',
+        'Vav': 'וָו', 'Zayin': 'זַיִן', 'Het': 'חֵית', 'Tet': 'טֵית', 'Yod': 'יוֹד',
+        'Kaf': 'כַּף', 'Lamed': 'לָמֶד', 'Mem': 'מֵם', 'Nun': 'נוּן', 'Samek': 'סָמֶךְ',
+        'Ayin': 'עַיִן', 'Pe': 'פֵּא', 'Tsade': 'צָדֵי', 'Qof': 'קוֹף', 'Resh': 'רֵישׁ',
+        'Shin/Sin': 'שִׁין', 'Tav': 'תָּו',
+        'Qamats': 'קָמָץ', 'Tsere': 'צֵרֵי', 'Hiriq Gadol': 'חִירִיק גָּדוֹל',
+        'Holam Haser': 'חוֹלָם חָסֵר', 'Holam Male': 'חוֹלָם מָלֵא', 'Shuruq': 'שׁוּרוּק',
+        'Patah': 'פַּתַח', 'Seré Haser': 'סֵגוֹל', 'Hiriq Qatan': 'חִירִיק קָטָן',
+        'Qamats Qatan': 'קָמָץ קָטָן', 'Qibbuts': 'קִבּוּץ', 'Sheva': 'שְׁוָא',
+        'Hataf Patah': 'חֲטַף פַּתַח', 'Hataf Seré': 'חֲטַף סֶגוֹל', 'Hataf Qamats': 'חֲטַף קָמָץ',
+      };
+      const hebrewText = hebrewNames[text] || text;
+      const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(hebrewText)}&tl=he&client=tw-ob`;
+      const audio = new Audio(url);
+      audio.play().catch(() => {
+        // Fallback to Web Speech API
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'he-IL';
+        utterance.rate = 0.8;
+        speechSynthesis.speak(utterance);
+      });
     }
 
     // =====================
@@ -1606,9 +1903,11 @@
     function showSection(id) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+
+      // Update desktop nav
       document.querySelectorAll('.nav-tabs button').forEach(b => {
-        if (b.textContent.toLowerCase().includes(id.replace('-', ' ').toLowerCase()) ||
+        b.classList.remove('active');
+        if (
           (id === 'home' && b.textContent === 'Início') ||
           (id === 'alef-bet' && b.textContent === 'Alef-Bet') ||
           (id === 'vogais' && b.textContent === 'Vogais') ||
@@ -1617,6 +1916,22 @@
           (id === 'quiz' && b.textContent === 'Quiz')
         ) b.classList.add('active');
       });
+
+      // Update bottom nav
+      document.querySelectorAll('.bottom-nav button').forEach(b => {
+        b.classList.remove('active');
+        const label = b.textContent.trim();
+        if (
+          (id === 'home' && label === 'Início') ||
+          (id === 'alef-bet' && label === 'Alef-Bet') ||
+          (id === 'vogais' && label === 'Vogais') ||
+          (id === 'dagesh' && label === 'Dagesh') ||
+          (id === 'flashcards' && label === 'Cards') ||
+          (id === 'quiz' && label === 'Quiz')
+        ) b.classList.add('active');
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function filterLetters(type, btn) {
@@ -1769,11 +2084,6 @@
     renderDagesh();
     renderFlashcard();
     nextQuestion();
-
-    // Load voices async
-    if (window.speechSynthesis) {
-      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-    }
   </script>
 </body>
 
