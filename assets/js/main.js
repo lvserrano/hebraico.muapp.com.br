@@ -1170,6 +1170,200 @@ function checkAnswer(btn, correct, opts) {
 }
 
 // =====================
+// GUIA VISUAL DE VOGAIS
+// Grupos por som (A, E, I, O, U, Sheva)
+// Cada entrada mostra o SINAL PURO isolado numa letra neutra (מ)
+// =====================
+const vgGroups = [
+  {
+    vowelPt: "A",
+    color: "#e05c5c",
+    variants: [
+      {
+        name: "Patah",
+        translit: "a",
+        cat: "short",
+        mark: "\u05D0\u05B7",
+        desc: "A curta — traço horizontal",
+      },
+      {
+        name: "Qamats",
+        translit: "ā",
+        cat: "long",
+        mark: "\u05D0\u05B8",
+        desc: "A longa — traço em T invertido",
+      },
+      {
+        name: "Hataf Patah",
+        translit: "ă",
+        cat: "sheva",
+        mark: "\u05D0\u05B2",
+        desc: "A ultracurta — sheva + patah (guturais)",
+      },
+    ],
+  },
+  {
+    vowelPt: "E",
+    color: "#4a90e8",
+    variants: [
+      {
+        name: "Segol",
+        translit: "e",
+        cat: "short",
+        mark: "\u05D0\u05B6",
+        desc: "E curta — três pontos triângulo",
+      },
+      {
+        name: "Tsere",
+        translit: "ē",
+        cat: "long",
+        mark: "\u05D0\u05B5",
+        desc: "E longa — dois pontos horizontais",
+      },
+      {
+        name: "Hataf Segol",
+        translit: "ĕ",
+        cat: "sheva",
+        mark: "\u05D0\u05B1",
+        desc: "E ultracurta — sheva + segol (guturais)",
+      },
+    ],
+  },
+  {
+    vowelPt: "I",
+    color: "#50c878",
+    variants: [
+      {
+        name: "Hiriq Qatan",
+        translit: "i",
+        cat: "short",
+        mark: "\u05D0\u05B4",
+        desc: "I curta — ponto único abaixo",
+      },
+      {
+        name: "Hiriq Gadol",
+        translit: "ī",
+        cat: "long",
+        mark: "\u05D0\u05B4\u05D9",
+        desc: "I longa — ponto + Yod",
+      },
+    ],
+  },
+  {
+    vowelPt: "O",
+    color: "#f0a500",
+    variants: [
+      {
+        name: "Holam",
+        translit: "ō",
+        cat: "long",
+        mark: "\u05D0\u05B9",
+        desc: "O longa — ponto acima à esquerda",
+      },
+      {
+        name: "Hataf Qamats",
+        translit: "ŏ",
+        cat: "sheva",
+        mark: "\u05D0\u05B3",
+        desc: "O ultracurta — sheva + qamats (raro)",
+      },
+    ],
+  },
+  {
+    vowelPt: "U",
+    color: "#c07ef0",
+    variants: [
+      {
+        name: "Qibbuts",
+        translit: "u",
+        cat: "short",
+        mark: "\u05D0\u05BB",
+        desc: "U curta — três pontos diagonais",
+      },
+      {
+        name: "Shuruq",
+        translit: "ū",
+        cat: "long",
+        mark: "\u05D5\u05BC",
+        desc: "U longa — Vav com dagesh central",
+      },
+    ],
+  },
+  {
+    vowelPt: "Ə",
+    color: "#8e44ad",
+    variants: [
+      {
+        name: "Sheva",
+        translit: "ə/—",
+        cat: "sheva",
+        mark: "\u05D0\u05B0",
+        desc: "Mudo (final) ou móvel (início de sílaba)",
+      },
+    ],
+  },
+];
+
+function renderVowelGuide() {
+  const wrap = document.getElementById("vg-grid");
+  if (!wrap) return;
+
+  wrap.innerHTML = vgGroups
+    .map((group) => {
+      const cards = group.variants
+        .map((v) => {
+          const catLabel =
+            v.cat === "long"
+              ? "Longa"
+              : v.cat === "short"
+                ? "Curta"
+                : "Ultracurta";
+          const catClass = `vg-cat-${v.cat}`;
+          return `
+        <div class="vg-card ${catClass}" onclick="playAudio('${audioKeyForVowel(v.name)}')" title="Clique para ouvir">
+          <span class="vg-mark">${v.mark}</span>
+          <div class="vg-card-body">
+            <span class="vg-card-name">${v.name}</span>
+            <span class="vg-card-translit">/${v.translit}/</span>
+            <span class="vg-card-cat">${catLabel}</span>
+            <span class="vg-card-desc">${v.desc}</span>
+          </div>
+        </div>`;
+        })
+        .join("");
+
+      return `
+      <div class="vg-group">
+        <div class="vg-group-header">
+          <span class="vg-vowel-pt" style="color:${group.color}">${group.vowelPt}</span>
+          <span class="vg-arrow">→</span>
+        </div>
+        <div class="vg-cards">${cards}</div>
+      </div>`;
+    })
+    .join("");
+}
+
+function audioKeyForVowel(name) {
+  const map = {
+    Patah: "patah",
+    Qamats: "qamats",
+    "Hataf Patah": "hataf-patah",
+    Segol: "segol",
+    Tsere: "tsere",
+    "Hataf Segol": "hataf-segol",
+    "Hiriq Qatan": "hiriq",
+    "Hiriq Gadol": "hiriq",
+    Holam: "holam",
+    "Hataf Qamats": "hataf-qamats",
+    Qibbuts: "qibbuts",
+    Shuruq: "shuruq",
+    Sheva: "sheva",
+  };
+  return map[name] || null;
+}
+
+// =====================
 // TABELA MASSORÉTICA
 // =====================
 
@@ -1411,3 +1605,4 @@ renderDagesh();
 renderFlashcard();
 nextQuestion();
 renderVocalTable();
+renderVowelGuide();
