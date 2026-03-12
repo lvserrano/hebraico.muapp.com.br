@@ -1,5 +1,4 @@
-
-    :root {
+:root {
       --ink: #0d0f14;
       --paper: #f0f3f8;
       --accent: #2a6dd9;
@@ -8,6 +7,7 @@
       --muted: #707a8a;
       --border: rgba(240, 243, 248, 0.1);
       --card-bg: rgba(240, 243, 248, 0.04);
+      --font-heb: 'Noto Serif Hebrew', serif;
     }
 
     *,
@@ -204,6 +204,7 @@
     }
 
     .hero .hebrew-big {
+      font-family: var(--font-heb);
       font-size: clamp(3rem, 10vw, 7rem);
       color: transparent;
       -webkit-text-stroke: 1px rgba(42, 109, 217, 0.4);
@@ -354,6 +355,7 @@
 
     .letter-heb {
       font-size: 2.5rem;
+      font-family: var(--font-heb);
       line-height: 1;
       display: block;
       margin-bottom: 0.4rem;
@@ -497,6 +499,7 @@
 
     .modal-letter-big {
       font-size: 5rem;
+      font-family: var(--font-heb);
       text-align: center;
       display: block;
       direction: rtl;
@@ -511,6 +514,7 @@
 
     .modal-sofit .sofit-char {
       font-size: 3rem;
+      font-family: var(--font-heb);
       direction: rtl;
       color: rgba(122, 174, 245, 0.7);
       margin-left: 0.5rem;
@@ -667,6 +671,7 @@
 
     .vowel-symbol {
       font-size: 2.2rem;
+      font-family: var(--font-heb);
       direction: rtl;
       display: block;
       margin-bottom: 0.4rem;
@@ -718,6 +723,7 @@
 
     .quiz-question-letter {
       font-size: 6rem;
+      font-family: var(--font-heb);
       direction: rtl;
       line-height: 1;
       margin-bottom: 1rem;
@@ -747,6 +753,13 @@
       font-weight: 700;
       color: var(--paper);
       transition: all 0.15s;
+    }
+
+    .quiz-opt.heb-opt {
+      font-family: var(--font-heb);
+      font-size: 2rem;
+      padding: 0.75rem;
+      direction: rtl;
     }
 
     .quiz-opt:hover {
@@ -892,6 +905,7 @@
 
     .dagesh-pair .without {
       font-size: 2.5rem;
+      font-family: var(--font-heb);
       color: rgba(240, 243, 248, 0.3);
     }
 
@@ -902,6 +916,7 @@
 
     .dagesh-pair .with {
       font-size: 2.5rem;
+      font-family: var(--font-heb);
       color: var(--accent);
     }
 
@@ -965,6 +980,7 @@
 
     .flashcard-letter {
       font-size: 5.5rem;
+      font-family: var(--font-heb);
       direction: rtl;
       line-height: 1;
       margin-bottom: 0.5rem;
@@ -981,13 +997,20 @@
     .flashcard-answer {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
-      font-weight: 900;
+      font-weight: 400;
       margin-bottom: 0.5rem;
+    }
+
+    .flashcard-answer.is-heb {
+      font-family: var(--font-heb);
+      font-size: 5rem;
+      direction: rtl;
+      line-height: 1.1;
     }
 
     .flashcard-answer em {
       color: var(--accent);
-      font-style: italic;
+      /* font-style: italic; */
     }
 
     .flashcard-details {
@@ -1085,6 +1108,7 @@
 
     .td-heb {
       font-size: 1.5rem;
+      font-family: var(--font-heb);
       direction: rtl;
     }
 
@@ -1170,6 +1194,7 @@
 
     .modal-alt-char {
       font-size: 2.2rem;
+      font-family: var(--font-heb);
       line-height: 1;
     }
 

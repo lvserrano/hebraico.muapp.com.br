@@ -1023,6 +1023,7 @@ function renderFlashcard() {
   const l = quizLetters[fcIndex];
   const card = document.getElementById("flashcard");
   card.classList.remove("flipped");
+  document.getElementById("fc-back-answer").classList.remove("is-heb");
 
   if (fcMode === "heb-to-name") {
     document.getElementById("fc-front-letter").textContent = l.heb;
@@ -1031,7 +1032,9 @@ function renderFlashcard() {
       `/${l.translit}/ · Valor: ${l.num}${l.badge ? ` · ${l.badge}` : ""}`;
   } else if (fcMode === "name-to-heb") {
     document.getElementById("fc-front-letter").textContent = l.name;
-    document.getElementById("fc-back-answer").innerHTML = `<em>${l.heb}</em>`;
+    const answerEl = document.getElementById("fc-back-answer");
+    answerEl.innerHTML = `<em>${l.heb}</em>`;
+    answerEl.classList.add("is-heb");
     document.getElementById("fc-back-details").innerHTML =
       `/${l.translit}/ · Valor: ${l.num}`;
   } else {
@@ -1119,16 +1122,17 @@ function nextQuestion() {
         val: o.heb,
         correct: o.id === quizCurrent.id,
       })),
+      true,
     );
   }
 }
 
-function renderOptions(opts) {
+function renderOptions(opts, isHeb = false) {
   const wrap = document.getElementById("quiz-options");
   wrap.innerHTML = "";
   opts.forEach((o) => {
     const btn = document.createElement("button");
-    btn.className = "quiz-opt";
+    btn.className = "quiz-opt" + (isHeb ? " heb-opt" : "");
     btn.textContent = o.val;
     btn.onclick = () => checkAnswer(btn, o.correct, opts);
     wrap.appendChild(btn);
