@@ -1377,6 +1377,35 @@
       margin-top: 0.15rem;
     }
 
+    /* Sinal isolado no canto direito */
+    .vg-sign-wrap {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: rgba(240, 243, 248, 0.03);
+      border: 1px solid rgba(240, 243, 248, 0.07);
+      border-radius: 6px;
+    }
+
+    .vg-sign-ghost {
+      font-family: var(--font-heb);
+      font-size: 2rem;
+      direction: rtl;
+      line-height: 1;
+    }
+    .vg-cat-long  .vg-sign-ghost { color: #6aabf0; }
+    .vg-cat-short .vg-sign-ghost { color: #e07070; }
+    .vg-cat-sheva .vg-sign-ghost { color: #b07edf; }
+
+    /* Canvas gerado por JS — ocupa o mesmo espaço */
+    .vg-sign-wrap canvas {
+      border-radius: 3px;
+    }
+
     /* Mobile */
     @media (max-width: 700px) {
       .vg-group {
