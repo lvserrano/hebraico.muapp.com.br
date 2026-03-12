@@ -966,7 +966,8 @@ function showSection(id) {
       (id === "vogais" && b.textContent === "Vogais") ||
       (id === "dagesh" && b.textContent === "Dagesh") ||
       (id === "flashcards" && b.textContent === "Flashcards") ||
-      (id === "quiz" && b.textContent === "Quiz")
+      (id === "quiz" && b.textContent === "Quiz") ||
+      (id === "tabela" && b.textContent === "Tabela")
     )
       b.classList.add("active");
   });
@@ -979,7 +980,8 @@ function showSection(id) {
       (id === "vogais" && label === "Vogais") ||
       (id === "dagesh" && label === "Dagesh") ||
       (id === "flashcards" && label === "Cards") ||
-      (id === "quiz" && label === "Quiz")
+      (id === "quiz" && label === "Quiz") ||
+      (id === "tabela" && label === "Tabela")
     )
       b.classList.add("active");
   });
@@ -1168,6 +1170,239 @@ function checkAnswer(btn, correct, opts) {
 }
 
 // =====================
+// TABELA MASSORÉTICA
+// =====================
+
+// Letras base exibidas nas colunas (as 22 letras canônicas, sem sofit)
+const vtBaseLetters = [
+  { heb: "א", name: "Alef", unicode: "\u05D0" },
+  { heb: "ב", name: "Bet", unicode: "\u05D1" },
+  { heb: "ג", name: "Gimel", unicode: "\u05D2" },
+  { heb: "ד", name: "Dalet", unicode: "\u05D3" },
+  { heb: "ה", name: "He", unicode: "\u05D4" },
+  { heb: "ו", name: "Vav", unicode: "\u05D5" },
+  { heb: "ז", name: "Zayin", unicode: "\u05D6" },
+  { heb: "ח", name: "Chet", unicode: "\u05D7" },
+  { heb: "ט", name: "Tet", unicode: "\u05D8" },
+  { heb: "י", name: "Yod", unicode: "\u05D9" },
+  { heb: "כ", name: "Kaf", unicode: "\u05DB" },
+  { heb: "ל", name: "Lamed", unicode: "\u05DC" },
+  { heb: "מ", name: "Mem", unicode: "\u05DE" },
+  { heb: "נ", name: "Nun", unicode: "\u05E0" },
+  { heb: "ס", name: "Samekh", unicode: "\u05E1" },
+  { heb: "ע", name: "Ayin", unicode: "\u05E2" },
+  { heb: "פ", name: "Pe", unicode: "\u05E4" },
+  { heb: "צ", name: "Tsade", unicode: "\u05E6" },
+  { heb: "ק", name: "Qof", unicode: "\u05E7" },
+  { heb: "ר", name: "Resh", unicode: "\u05E8" },
+  { heb: "שׁ", name: "Shin", unicode: "\u05E9\u05C1" },
+  { heb: "ת", name: "Tav", unicode: "\u05EA" },
+];
+
+// Vogais das linhas: sinal unicode + nome + translit + categoria
+// O sinal é aplicado diretamente sobre o unicode da letra base
+const vtVowelRows = [
+  // Longas
+  {
+    name: "Qamats",
+    translit: "ā",
+    mark: "\u05B8",
+    cat: "long",
+    note: "A longa",
+  },
+  {
+    name: "Tsere",
+    translit: "ē",
+    mark: "\u05B5",
+    cat: "long",
+    note: "E longa",
+  },
+  {
+    name: "Hiriq Gadol",
+    translit: "ī",
+    mark: "\u05B4\u05D9",
+    cat: "long",
+    note: "I longa (com Yod)",
+  },
+  {
+    name: "Holam",
+    translit: "ō",
+    mark: "\u05B9",
+    cat: "long",
+    note: "O longa",
+  },
+  {
+    name: "Shuruq",
+    translit: "ū",
+    mark: null,
+    cat: "long",
+    note: "U longa (Vav+Dagesh)",
+    special: "shuruq",
+  },
+  // Curtas
+  {
+    name: "Patah",
+    translit: "a",
+    mark: "\u05B7",
+    cat: "short",
+    note: "A curta",
+  },
+  {
+    name: "Segol",
+    translit: "e",
+    mark: "\u05B6",
+    cat: "short",
+    note: "E curta",
+  },
+  {
+    name: "Hiriq Qatan",
+    translit: "i",
+    mark: "\u05B4",
+    cat: "short",
+    note: "I curta",
+  },
+  {
+    name: "Qibbuts",
+    translit: "u",
+    mark: "\u05BB",
+    cat: "short",
+    note: "U curta",
+  },
+  // Shevas / ultracurtas
+  {
+    name: "Sheva",
+    translit: "ə",
+    mark: "\u05B0",
+    cat: "sheva",
+    note: "Mudo ou móvel",
+  },
+  {
+    name: "Hataf Patah",
+    translit: "ă",
+    mark: "\u05B2",
+    cat: "sheva",
+    note: "A ultracurta (guturais)",
+  },
+  {
+    name: "Hataf Segol",
+    translit: "ĕ",
+    mark: "\u05B1",
+    cat: "sheva",
+    note: "E ultracurta (guturais)",
+  },
+  {
+    name: "Hataf Qamats",
+    translit: "ŏ",
+    mark: "\u05B3",
+    cat: "sheva",
+    note: "O ultracurta (raro)",
+  },
+];
+
+// Letras guturais — só aceitam Hataf, não sheva simples
+const gutturals = new Set(["א", "ה", "ח", "ע"]);
+// Letras que não recebem certas vogais abaixo
+const noSubVowel = new Set(["ו"]); // Vav é mater lectionis
+
+let vtFilter = "all";
+
+function setVTFilter(cat, btn) {
+  vtFilter = cat;
+  document
+    .querySelectorAll(".vt-filter-bar .filter-btn")
+    .forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderVocalTable();
+}
+
+function buildCellChar(letter, vowel) {
+  // Shuruq é sempre ו + dagesh — não varia por letra base
+  if (vowel.special === "shuruq") return "וּ";
+  if (!vowel.mark) return "—";
+
+  // Hiriq Gadol: letra + hiriq + yod
+  if (vowel.name === "Hiriq Gadol") {
+    return letter.unicode + "\u05B4\u05D9";
+  }
+
+  return letter.unicode + vowel.mark;
+}
+
+function isCellValid(letter, vowel) {
+  const isGuttural = gutturals.has(letter.heb.charAt(0));
+
+  // Hataf só em guturais
+  if (vowel.cat === "sheva" && vowel.name.startsWith("Hataf") && !isGuttural)
+    return false;
+
+  // Shuruq: exibir apenas uma célula de referência (coluna Vav)
+  if (vowel.special === "shuruq" && letter.heb !== "ו") return false;
+
+  return true;
+}
+
+function renderVocalTable() {
+  const table = document.getElementById("vt-table");
+  if (!table) return;
+
+  const rows =
+    vtFilter === "all"
+      ? vtVowelRows
+      : vtVowelRows.filter((v) => v.cat === vtFilter);
+
+  // Cabeçalho — letras base
+  const headerCells = vtBaseLetters
+    .map(
+      (l) =>
+        `<th class="vt-th-letter" title="${l.name}">
+      <span class="vt-col-heb">${l.heb}</span>
+      <span class="vt-col-name">${l.name}</span>
+    </th>`,
+    )
+    .join("");
+
+  const thead = `<thead><tr>
+    <th class="vt-th-vowel">Vogal</th>
+    <th class="vt-th-translit">/ /</th>
+    ${headerCells}
+  </tr></thead>`;
+
+  // Corpo — uma linha por vogal
+  const tbody = rows
+    .map((vowel) => {
+      const catClass = `vt-row-${vowel.cat}`;
+
+      const cells = vtBaseLetters
+        .map((letter) => {
+          const valid = isCellValid(letter, vowel);
+          const char = valid ? buildCellChar(letter, vowel) : "";
+          const cellClass = valid
+            ? `vt-cell vt-cell-${vowel.cat}`
+            : "vt-cell vt-cell-empty";
+          const audio = valid
+            ? `onclick="playAudio('${vowel.name === "Hiriq Gadol" || vowel.name === "Hiriq Qatan" ? "hiriq" : vowel.name.toLowerCase().replace(/ /g, "-")}')"`
+            : "";
+          return `<td class="${cellClass}" title="${valid ? letter.name + " + " + vowel.name : ""}" ${audio}>
+        <span class="vt-char">${char}</span>
+      </td>`;
+        })
+        .join("");
+
+      return `<tr class="${catClass}">
+      <td class="vt-td-vowel">
+        <span class="vt-vowel-name">${vowel.name}</span>
+        <span class="vt-vowel-note">${vowel.note}</span>
+      </td>
+      <td class="vt-td-translit">/${vowel.translit}/</td>
+      ${cells}
+    </tr>`;
+    })
+    .join("");
+
+  table.innerHTML = thead + `<tbody>${tbody}</tbody>`;
+}
+
+// =====================
 // INIT
 // =====================
 renderAlphabet();
@@ -1175,3 +1410,4 @@ renderVowels();
 renderDagesh();
 renderFlashcard();
 nextQuestion();
+renderVocalTable();

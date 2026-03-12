@@ -997,7 +997,7 @@
     .flashcard-answer {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
-      font-weight: 400;
+      font-weight: 900;
       margin-bottom: 0.5rem;
     }
 
@@ -1257,6 +1257,218 @@
     .bottom-nav button.active {
       color: var(--accent);
     }
+
+    /* =====================
+       TABELA MASSORÉTICA
+    ===================== */
+    .vt-filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .vt-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .vt-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    /* Cabeçalho das letras */
+    .vt-th-letter {
+      background: rgba(42, 109, 217, 0.07);
+      border-bottom: 1px solid rgba(42, 109, 217, 0.25);
+      border-right: 1px solid var(--border);
+      padding: 0.5rem 0.4rem;
+      text-align: center;
+      min-width: 52px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .vt-col-heb {
+      font-family: var(--font-heb);
+      font-size: 1.4rem;
+      display: block;
+      direction: rtl;
+      line-height: 1.2;
+      color: var(--paper);
+    }
+
+    .vt-col-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.45rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(240, 243, 248, 0.3);
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    /* Cabeçalho fixo esquerdo */
+    .vt-th-vowel {
+      background: rgba(13, 15, 20, 0.95);
+      border-bottom: 1px solid rgba(42, 109, 217, 0.25);
+      border-right: 1px solid rgba(42, 109, 217, 0.2);
+      padding: 0.6rem 0.75rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 3;
+      min-width: 120px;
+    }
+
+    .vt-th-translit {
+      background: rgba(13, 15, 20, 0.95);
+      border-bottom: 1px solid rgba(42, 109, 217, 0.25);
+      border-right: 1px solid var(--border);
+      padding: 0.6rem 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: rgba(240, 243, 248, 0.3);
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      min-width: 44px;
+    }
+
+    /* Células de dados */
+    .vt-cell {
+      border-right: 1px solid rgba(240, 243, 248, 0.04);
+      border-bottom: 1px solid rgba(240, 243, 248, 0.04);
+      padding: 0.35rem 0.2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .vt-cell:hover {
+      background: rgba(42, 109, 217, 0.12);
+    }
+
+    .vt-cell-empty {
+      border-right: 1px solid rgba(240, 243, 248, 0.03);
+      border-bottom: 1px solid rgba(240, 243, 248, 0.03);
+      padding: 0.35rem 0.2rem;
+      text-align: center;
+    }
+
+    .vt-char {
+      font-family: var(--font-heb);
+      font-size: 1.5rem;
+      direction: rtl;
+      display: block;
+      line-height: 1.5;
+    }
+
+    /* Cor por categoria */
+    .vt-cell-long   .vt-char { color: #4a90e8; }
+    .vt-cell-short  .vt-char { color: #c0392b; }
+    .vt-cell-sheva  .vt-char { color: #8e44ad; }
+    .vt-cell-empty  .vt-char { color: rgba(240, 243, 248, 0.1); font-size: 0.8rem; }
+
+    /* Coluna de nome da vogal (fixa à esquerda) */
+    .vt-td-vowel {
+      position: sticky;
+      left: 0;
+      background: rgba(13, 15, 20, 0.97);
+      border-right: 1px solid rgba(42, 109, 217, 0.2);
+      border-bottom: 1px solid rgba(240, 243, 248, 0.05);
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+      z-index: 1;
+    }
+
+    .vt-vowel-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: block;
+      color: var(--paper);
+    }
+
+    .vt-vowel-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.06em;
+      color: rgba(240, 243, 248, 0.3);
+      display: block;
+      margin-top: 0.1rem;
+      text-transform: uppercase;
+    }
+
+    /* Coluna de transliteração */
+    .vt-td-translit {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid rgba(240, 243, 248, 0.05);
+      padding: 0.5rem 0.4rem;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    /* Separadores visuais entre grupos */
+    .vt-row-long   .vt-td-vowel { border-left: 3px solid #4a90e8; }
+    .vt-row-short  .vt-td-vowel { border-left: 3px solid #c0392b; }
+    .vt-row-sheva  .vt-td-vowel { border-left: 3px solid #8e44ad; }
+
+    /* Hover na linha inteira */
+    .vt-table tbody tr:hover .vt-cell,
+    .vt-table tbody tr:hover .vt-cell-empty {
+      background: rgba(42, 109, 217, 0.04);
+    }
+
+    /* Legenda */
+    .vt-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .vt-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(240, 243, 248, 0.4);
+    }
+
+    .vt-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .vt-dot.long  { background: #4a90e8; }
+    .vt-dot.short { background: #c0392b; }
+    .vt-dot.sheva { background: #8e44ad; }
+
+    /* =====================
+       FIM TABELA MASSORÉTICA
+    ===================== */
 
     /* RESPONSIVE */
     @media (max-width: 700px) {
