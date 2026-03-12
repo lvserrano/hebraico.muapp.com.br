@@ -1765,9 +1765,130 @@
         gap: 0.6rem;
       }
 
-      /* Table — hide on mobile, show cards instead */
-      .table-wrap {
+      /* Table — hide tabela de vogais no mobile, mas NÃO a massorética */
+      .table-wrap:not(.vt-scroll) {
         display: none;
+      }
+
+      /* Tabela massorética mobile: scroll horizontal funcional */
+      .vt-scroll {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 4px;
+        /* força o scroll a funcionar no iOS */
+        max-width: 100%;
+      }
+
+      /* Sticky columns: desativa no mobile pois causam glitch no iOS */
+      .vt-th-vowel,
+      .vt-td-vowel {
+        position: static;
+      }
+
+      /* Reduz tamanho das células na tabela para caber melhor */
+      .vt-th-letter {
+        min-width: 38px;
+        padding: 0.35rem 0.2rem;
+      }
+
+      .vt-col-heb {
+        font-size: 1.1rem;
+      }
+
+      .vt-col-name {
+        display: none;
+      }
+
+      .vt-th-vowel {
+        min-width: 90px;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.5rem;
+      }
+
+      .vt-th-translit {
+        min-width: 32px;
+        padding: 0.4rem 0.2rem;
+        font-size: 0.55rem;
+      }
+
+      .vt-td-vowel {
+        padding: 0.35rem 0.5rem;
+        min-width: 90px;
+      }
+
+      .vt-vowel-name {
+        font-size: 0.75rem;
+      }
+
+      .vt-vowel-note {
+        display: none;
+      }
+
+      .vt-td-translit {
+        padding: 0.35rem 0.2rem;
+        font-size: 0.65rem;
+        min-width: 32px;
+      }
+
+      .vt-cell,
+      .vt-cell-empty {
+        padding: 0.2rem 0.1rem;
+        min-width: 38px;
+      }
+
+      .vt-char {
+        font-size: 1.15rem;
+        line-height: 1.6;
+      }
+
+      /* Guia visual mobile */
+      .vg-group {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem 0.85rem;
+      }
+
+      .vg-group-header {
+        padding-top: 0;
+      }
+
+      .vg-vowel-pt {
+        font-size: 1.8rem;
+      }
+
+      .vg-cards {
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .vg-card {
+        min-width: 0;
+        width: 100%;
+        padding: 0.5rem 0.7rem;
+        gap: 0.6rem;
+      }
+
+      .vg-mark {
+        font-size: 1.8rem;
+        min-width: 1.8rem;
+      }
+
+      .vg-card-name {
+        font-size: 0.8rem;
+      }
+
+      .vg-card-desc {
+        font-size: 0.65rem;
+      }
+
+      .vg-sign-wrap {
+        width: 2.8rem;
+        height: 2.8rem;
+      }
+
+      .vg-sign-ghost {
+        font-size: 1.6rem;
       }
 
       /* Flashcard */
